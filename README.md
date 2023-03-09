@@ -1,4 +1,4 @@
-#BACKEND part for SECRED WORDS
+#BACKEND part for SECRET WORDS
 
 
 this is server part for Secred Words,
