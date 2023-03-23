@@ -1,0 +1,7 @@
+{
+    "semi": false,
+    "trailingComa" : "all",
+    "sirgleQuote" : true,
+    "printWidth": 120,
+    "tabWidth": 2
+}
