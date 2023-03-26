@@ -3,7 +3,6 @@ import "dotenv/config"
 import mongoose from "mongoose"
 import env from "./util/validateEnv"
 import apptest from "./apptest"
-import { addExitCallback } from "catch-exit"
 
 const port = env.PORT || 80
 
