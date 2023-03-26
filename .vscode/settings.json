@@ -1,2 +1,4 @@
 {
+  "appService.defaultWebAppToDeploy": "/subscriptions/9b024392-68d1-4e95-aac6-4021404465a6/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/SecretWords",
+  "appService.deploySubpath": "."
 }
