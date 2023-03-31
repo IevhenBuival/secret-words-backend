@@ -3,13 +3,14 @@ import express, { NextFunction, Request, Response } from "express"
 import morgan from "morgan"
 import wordsRoutes from "./routes/words"
 import userRoutes from "./routes/users"
-
+import frontmanRoutes from "./routes/frontman"
 import langRoutes from "./routes/languages"
 import createHttpError, { isHttpError } from "http-errors"
 import session from "express-session"
 import env from "./util/validateEnv"
 import MongoStore from "connect-mongo"
 import { requiresAuth } from "./middleware/auth"
+import path from "path"
 
 const app = express()
 
@@ -32,7 +33,14 @@ app.use(
       }) || undefined,
   })
 )
-
+const clidir = path.join(__dirname, "../client")
+console.log(clidir)
+//app.use(express.static(path.resolve(__dirname, "client")))
+app.use(express.static(clidir))
+app.get("/", (req, res) => {
+  res.sendFile(`${clidir}/index.html`)
+})
+//app.use("/", frontmanRoutes)
 app.use("/api/user", userRoutes)
 app.use("/api/words", requiresAuth, wordsRoutes)
 app.use("/api/lang", requiresAuth, langRoutes)

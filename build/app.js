@@ -26,21 +26,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.apptest = void 0;
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const words_1 = __importDefault(require("./routes/words"));
 const users_1 = __importDefault(require("./routes/users"));
-const test_1 = __importDefault(require("./routes/test"));
 const languages_1 = __importDefault(require("./routes/languages"));
 const http_errors_1 = __importStar(require("http-errors"));
 const express_session_1 = __importDefault(require("express-session"));
 const validateEnv_1 = __importDefault(require("./util/validateEnv"));
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const auth_1 = require("./middleware/auth");
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
-exports.apptest = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use((0, express_session_1.default)({
@@ -55,7 +53,14 @@ app.use((0, express_session_1.default)({
         mongoUrl: validateEnv_1.default.MONGO_CONECTION_STRING,
     }) || undefined,
 }));
-exports.apptest.use("/", test_1.default);
+const clidir = path_1.default.join(__dirname, "../client");
+console.log(clidir);
+//app.use(express.static(path.resolve(__dirname, "client")))
+app.use(express_1.default.static(clidir));
+app.get("/", (req, res) => {
+    res.sendFile(`${clidir}/index.html`);
+});
+//app.use("/", frontmanRoutes)
 app.use("/api/user", users_1.default);
 app.use("/api/words", auth_1.requiresAuth, words_1.default);
 app.use("/api/lang", auth_1.requiresAuth, languages_1.default);
