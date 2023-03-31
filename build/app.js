@@ -54,13 +54,11 @@ app.use((0, express_session_1.default)({
     }) || undefined,
 }));
 const clidir = path_1.default.join(__dirname, "../client");
-console.log(clidir);
 //app.use(express.static(path.resolve(__dirname, "client")))
 app.use(express_1.default.static(clidir));
 app.get("/", (req, res) => {
     res.sendFile(`${clidir}/index.html`);
 });
-//app.use("/", frontmanRoutes)
 app.use("/api/user", users_1.default);
 app.use("/api/words", auth_1.requiresAuth, words_1.default);
 app.use("/api/lang", auth_1.requiresAuth, languages_1.default);
