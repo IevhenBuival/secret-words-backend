@@ -48,7 +48,6 @@ exports.getLanguage = getLanguage;
 const createLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const language = req.body.name;
     const charset = req.body.charset;
-    console.log(charset);
     try {
         if (!language) {
             throw (0, http_errors_1.default)(400, "You mast assign name to language");
@@ -58,7 +57,7 @@ const createLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             throw (0, http_errors_1.default)(409, "Language alrady exist");
         const charSetID = yield charset_1.default.findOne({ name: charset }).exec();
         if (!charSetID)
-            throw (0, http_errors_1.default)(401, "Invalid charset for lenguage");
+            throw (0, http_errors_1.default)(401, "Invalid charset for language");
         const newLang = yield language_1.default.create({
             name: language,
             charset: charSetID._id,
