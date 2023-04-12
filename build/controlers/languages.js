@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateLanguage = exports.createLanguage = exports.getLanguage = exports.getLanguages = void 0;
 const language_1 = __importDefault(require("../model/language"));
+const charset_1 = __importDefault(require("../model/charset"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const http_errors_1 = __importDefault(require("http-errors"));
 //import { assertIsDefined } from "../util/assertIsDefined";
@@ -46,6 +47,8 @@ const getLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 exports.getLanguage = getLanguage;
 const createLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const language = req.body.name;
+    const charset = req.body.charset;
+    console.log(charset);
     try {
         if (!language) {
             throw (0, http_errors_1.default)(400, "You mast assign name to language");
@@ -53,8 +56,12 @@ const createLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         const isDouble = yield language_1.default.findOne({ name: language }).exec();
         if (isDouble)
             throw (0, http_errors_1.default)(409, "Language alrady exist");
+        const charSetID = yield charset_1.default.findOne({ name: charset }).exec();
+        if (!charSetID)
+            throw (0, http_errors_1.default)(401, "Invalid charset for lenguage");
         const newLang = yield language_1.default.create({
             name: language,
+            charset: charSetID._id,
         });
         /* 201 resurse created */
         res.status(201).json(newLang);
@@ -67,6 +74,7 @@ exports.createLanguage = createLanguage;
 const updateLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const Id = req.params.langID;
     const newName = req.body.name;
+    const newCharSet = req.body.charset;
     //const authUser = req.session.userId;
     try {
         //assertIsDefined(authUser);
@@ -78,7 +86,11 @@ const updateLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         if (!searchedRecord) {
             throw (0, http_errors_1.default)(404, "language whith id:" + Id + " not found");
         }
+        const charSetID = yield charset_1.default.findOne({ name: newCharSet }).exec();
+        if (!charSetID)
+            throw (0, http_errors_1.default)(401, "Invalid charset for lenguage");
         searchedRecord.name = newName;
+        searchedRecord.charset = charSetID._id;
         const UpdatedLanguage = yield searchedRecord.save();
         res.status(200).json(UpdatedLanguage);
     }

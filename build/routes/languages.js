@@ -28,12 +28,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const LangController = __importStar(require("../controlers/languages"));
+const charSetController = __importStar(require("../controlers/charsets"));
 const rights_1 = require("../middleware/rights");
 const router = express_1.default.Router();
-router.get('/', LangController.getLanguages);
-router.get('/view/', rights_1.requiresRights, LangController.getLanguages);
+router.get("/", LangController.getLanguages);
+router.get("/charset/", charSetController.getCharSets);
+router.get("/view/", rights_1.requiresRights, LangController.getLanguages);
 router.get("/:langID", rights_1.requiresRights, LangController.getLanguage);
-router.post('/', rights_1.requiresRights, LangController.createLanguage);
+router.post("/", rights_1.requiresRights, LangController.createLanguage);
 router.patch("/:langID", rights_1.requiresRights, LangController.updateLanguage);
 exports.default = router;
 //# sourceMappingURL=languages.js.map
